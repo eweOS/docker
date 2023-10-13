@@ -1,11 +1,7 @@
-FROM alpine:latest AS builder
+FROM ghcr.io/eweos/docker:master
 
-RUN mkdir -p /rootfs
-WORKDIR /
-RUN apk add wget
-RUN wget -r -np -nd -R "index.html*" -A 'eweos-x86_64-tarball-*.xz' https://os-repo.ewe.moe/eweos-images/x86_64/ && mv ./*.xz image.tar.xz && tar xf ./image.tar.xz -C /rootfs
+RUN pacman -Sy
+RUN pacman -S --noconfirm archversion wget
+RUN pip install pyxdg
 
-FROM scratch AS root
-COPY --from=builder /rootfs/ /
-
-CMD ["/usr/bin/bash"]
+CMD ["/usr/bin/archversion"]
