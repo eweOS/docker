@@ -7,4 +7,6 @@ RUN pip install pyxdg
 ADD updater.ini /packages.conf
 ADD eweversion /usr/bin/eweversion
 
+RUN chmod +x /usr/bin/eweversion
+
 CMD ["/usr/bin/eweversion"]
