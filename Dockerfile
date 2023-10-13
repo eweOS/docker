@@ -4,8 +4,7 @@ RUN pacman -Sy
 RUN pacman -S --noconfirm archversion wget
 RUN pip install pyxdg
 
-RUN mkdir -p ~/.config/archversion
+ADD updater.ini /packages.conf
+ADD eweversion /usr/bin/eweversion
 
-ADD updater.ini ~/.config/archversion/packages.conf
-
-CMD ["/usr/bin/archversion"]
+CMD ["/usr/bin/eweversion"]
