@@ -9,7 +9,7 @@ RUN case ${TARGETPLATFORM} in \
             "linux/arm64")  DOWNARCH=aarch64  ;; \
             *)  exit 1  ;; \
     esac && \
-    wget -r -np -nd -R "index.html*" -A 'eweos-x86_64-tarball-*.xz' https://os-repo.ewe.moe/eweos-images/x86_64/ && mv ./*.xz image.tar.xz && tar xf ./image.tar.xz -C /rootfs
+    wget -r -np -nd -R "index.html*" -A "eweos-$DOWNARCH-tarball-*.xz" https://os-repo.ewe.moe/eweos-images/$DOWNARCH/ && mv ./*.xz image.tar.xz && tar xf ./image.tar.xz -C /rootfs
 
 FROM scratch AS root
 COPY --from=builder /rootfs/ /
