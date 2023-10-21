@@ -3,6 +3,8 @@ name: Publish Docker Image
 on:
   push:
     branches: [ "buildenv" ]
+  schedule:
+    - cron: '0 0 * * *'
 
 env:
   REGISTRY: ghcr.io
