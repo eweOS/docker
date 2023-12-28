@@ -7,6 +7,7 @@ RUN apk add wget
 RUN case ${TARGETPLATFORM} in \
             "linux/amd64")  DOWNARCH=x86_64  ;; \
             "linux/arm64")  DOWNARCH=aarch64  ;; \
+            "linux/riscv64") DOWNARCH=riscv64 ;; \
             *)  exit 1  ;; \
     esac && \
     wget -r -np -nd -R "index.html*" -A "eweos-$DOWNARCH-tarball.tar.xz" https://os-repo.ewe.moe/eweos-images/ && mv ./*.tar.xz image.tar.xz && tar xf ./image.tar.xz -C /rootfs
