@@ -1,8 +1,7 @@
 FROM ghcr.io/eweos/docker:master
 
 RUN echo "[testing]" >> /etc/pacman.conf
-RUN echo "SigLevel = Never" >> /etc/pacman.conf
-RUN echo "Server = http://os-repo.ewe.moe/eweos/testing/os/\$arch/" >> /etc/pacman.conf
+RUN echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 RUN pacman -Sy
 RUN pacman -S --noconfirm archversion wget
 RUN pip install pyxdg
