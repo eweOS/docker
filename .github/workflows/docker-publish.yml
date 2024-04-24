@@ -24,6 +24,27 @@ jobs:
         uses: actions/checkout@v3
 
       - uses: docker/setup-qemu-action@v2
+      
+      - name: Download image
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: publish_iso.yml
+          workflow_conclusion: completed
+          branch: master
+          name: eweos-*.tar.gz
+          name_is_regexp: true
+          repo: eweOS/iso
+          check_artifacts: true
+          search_artifacts: true
+          skip_unpack: true
+          if_no_artifact_found: fail
+          allow_forks: false
+
+      - name: List downloaded images
+        run: |
+          ls -l
 
       - name: Install cosign
         if: github.event_name != 'pull_request'
