@@ -35,7 +35,7 @@ jobs:
           branch: master
           name: eweos-*.tar.gz
           name_is_regexp: true
-          repo: eweOS/iso
+          repo: iso
           check_artifacts: true
           search_artifacts: true
           skip_unpack: true
