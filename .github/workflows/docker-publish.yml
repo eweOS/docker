@@ -13,6 +13,15 @@ env:
 
 jobs:
   build:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64, aarch64, riscv64]
+        include:
+          - arch: x86_64
+            debarch: amd64
+          - arch: aarch64
+            debarch: arm64
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,7 +32,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: docker/setup-qemu-action@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.arch }}
       
       - name: Download image
         id: download-artifact
@@ -33,18 +45,17 @@ jobs:
           workflow: publish_iso.yml
           workflow_conclusion: completed
           branch: master
-          name: eweos-*.tar.gz
+          name: eweos-${{ matrix.arch }}-tarball.tar.xz$
           name_is_regexp: true
-          repo: iso
+          repo: eweOS/iso
           check_artifacts: true
           search_artifacts: true
-          skip_unpack: true
           if_no_artifact_found: fail
           allow_forks: false
 
-      - name: List downloaded images
+      - name: Fix path
         run: |
-          ls -l
+          mv eweos-*/*.tar.xz ./image.tar.xz
 
       - name: Install cosign
         if: github.event_name != 'pull_request'
@@ -74,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/riscv64
+          platforms: linux/${{ matrix.debarch }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
