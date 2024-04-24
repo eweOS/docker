@@ -34,7 +34,7 @@ jobs:
           workflow: publish_iso.yml
           workflow_conclusion: completed
           branch: master
-          name: eweos-.*-tarball.tar.xz$
+          name: eweos-.*-tarball
           name_is_regexp: true
           repo: eweOS/iso
           check_artifacts: true
@@ -44,8 +44,7 @@ jobs:
 
       - name: Fix path
         run: |
-          for dir in eweos-*; do mv $dir ${dir%.*}; done
-          mv eweos-*/*.tar.xz ./
+          mv eweos-*-tarball/*.tar.xz ./
 
       - name: Install cosign
         if: github.event_name != 'pull_request'
