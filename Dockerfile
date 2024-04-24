@@ -3,7 +3,13 @@ ARG TARGETPLATFORM
 
 RUN mkdir -p /rootfs
 WORKDIR /
-COPY image.tar.xz .
+COPY . .
+RUN case ${TARGETPLATFORM} in \
+            "linux/amd64")  DOWNARCH=x86_64  ;; \
+            "linux/arm64")  DOWNARCH=aarch64  ;; \
+            "linux/riscv64") DOWNARCH=riscv64 ;; \
+            *)  exit 1  ;; \
+    esac && mv ./eweos-$DOWNARCH-*.tar.xz image.tar.xz
 RUN tar xf ./image.tar.xz -C /rootfs
 
 FROM scratch AS root
